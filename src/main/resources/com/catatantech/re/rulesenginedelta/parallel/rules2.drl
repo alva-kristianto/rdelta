@@ -1,0 +1,59 @@
+package com.catatantech.re.rulesenginedelta.parallel;
+
+
+import com.catatantech.re.rulesenginedelta.parallel.Person;
+
+
+global java.util.Set controlSet;
+
+
+/*
+ini menunjukkan bahwa dengan menggunakan modify, bisa dilakukan trigger
+matching secara berkelanjutan
+*/
+
+rule "r01"
+when
+    $p : Person(status == "kontrak")
+then
+    // $p.setStatus("tetap");
+    
+    modify($p) {
+        setStatus("tetap");
+    }
+    
+    controlSet.add("rsatu: " + $p.toString());
+    System.out.println("then satu");
+end
+
+
+
+
+rule "r02"
+when
+    $p : Person(status == "tetap")
+then
+    // $p.setPenempatan("head office");
+
+    modify ($p) {
+        setPenempatan("head office");
+    }
+
+    controlSet.add("rdua: " + $p.toString());
+    System.out.println("then dua");
+end
+
+
+
+
+rule "r03"
+when
+    $p : Person(penempatan == "head office")
+then
+    $p.setSalary(1000);
+    controlSet.add("rtiga: " + $p.toString());
+    System.out.println("then tiga");
+end
+
+
+

@@ -1,0 +1,60 @@
+package com.catatantech.re.rulesenginedelta.stateful;
+
+
+rule "when fire, turn on sprinkler"
+when
+
+    Fire($room: room)
+    $sprinkler : Sprinkler(room == $room, on == false)
+
+then
+
+    modify($sprinkler) { setOn(true) };
+    System.out.println("turn on sprinkler for room : " + $room.getName());
+
+end
+
+
+rule "raise alarm"
+when
+
+    exists Fire()
+
+then
+    
+    insert( new Alarm() );
+    System.out.println("raise new alarm");
+
+end
+
+
+
+rule "turn off alarm"
+when
+
+    not Fire()
+    $alarm : Alarm();
+
+then
+
+    delete ($alarm);
+    System.out.println("turn off alarm");
+
+end
+
+
+
+rule "status output when things are ok"
+when
+
+    not Alarm();
+    not Sprinkler( on == true );
+
+then
+
+    System.out.println("everything is ok");
+
+end
+
+
+

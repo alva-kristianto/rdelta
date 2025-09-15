@@ -1,0 +1,27 @@
+
+package com.catatantech.re.rulesenginedelta;
+
+import com.catatantech.re.rulesenginedelta.droolsbook.Applicant;
+
+
+
+global java.util.Set controlSet;
+
+rule "will execute per each Measurement having ID color"
+when
+	Measurement( id == "color", $colorVal : val )
+then
+	controlSet.add($colorVal);
+end
+
+
+
+rule "is of valid age"
+when
+    $a : Applicant(age < 18)
+then
+    $a.setValid(false);
+    controlSet.add($a.getName() + "false");
+end
+
+
